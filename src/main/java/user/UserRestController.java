@@ -34,8 +34,8 @@ public class UserRestController {
     }
 
     @RequestMapping(value="/users/{id}/connections",method=RequestMethod.GET)
-    public Set<UserEntity> getConnections(@PathVariable("id") long userId) {
-        return (Set<UserEntity>) userService.getConnections(userId);
+    public Set<UserEntity> getUserConnections(@PathVariable("id") long userId) {
+        return (Set<UserEntity>) userService.getUserConnections(userId);
     }
     
 }

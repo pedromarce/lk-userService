@@ -41,7 +41,7 @@ public class UserEntity implements Serializable {
         connections.add(userEntity);
     }
 
-    public Iterable<UserEntity> getConnections() {
+    public Iterable<UserEntity> getUserConnections() {
         if (connections == null) {
             connections = new HashSet<UserEntity>();
         }        

@@ -8,18 +8,13 @@ package user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import org.springframework.messaging.handler.annotation.SendTo;
 
 /**
  *
@@ -37,29 +32,26 @@ public class UserJmsReceiver {
     private UserService userService;
     
     @JmsListener(destination = "addUser")
-    public UserEntity addUser(String message) throws IOException {
+    public void addUser(String message) throws IOException {
         UserEntity userEntity = mapper.readValue(message,UserEntity.class);
-        return userService.addUser(userEntity);
+        userService.addUser(userEntity);
     }
     
     @JmsListener(destination = "addUserConnection")
-    public UserEntity addUserConnection(String message) {
+    public void addUserConnection(String message) {
         long userId = 0, connectionId = 0;
-        return userService.addConnection(userId, connectionId);
+        userService.addConnection(userId, connectionId);
     }
 
-    @JmsListener(destination = "getConnections")
-    @SendTo("queueOut")
-    public void getConnections(final String userId) {
-        System.out.println(userId);
+    @JmsListener(destination = "getUserConnections")
+    public void getUserConnections(final String userId) {
         MessageCreator messageCreator;
         messageCreator = new MessageCreator() {
             @Override
             public Message createMessage(Session session) throws JMSException {
                 try {
-                    return session.createTextMessage(mapper.writer().writeValueAsString(userService.getConnections(Long.parseLong(userId))));
+                    return session.createTextMessage(mapper.writer().writeValueAsString(userService.getUserConnections(Long.parseLong(userId))));
                 } catch (JsonProcessingException ex) {
-                    Logger.getLogger(UserJmsReceiver.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
             }

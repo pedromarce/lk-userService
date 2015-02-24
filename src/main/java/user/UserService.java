@@ -7,8 +7,6 @@ package user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import user.UserEntity;
-import user.UserRepository;
 
 /**
  *
@@ -29,6 +27,7 @@ public class UserService {
     public UserEntity addUser (UserEntity userEntity) {
         System.out.println(userEntity.getName());
         userRepository.save(userEntity);
+        
         return userEntity;
     }
     
@@ -40,8 +39,8 @@ public class UserService {
         return user;
     }
     
-    public Iterable<UserEntity> getConnections (long userId) {
-        return userRepository.findOne(userId).getConnections();
+    public Iterable<UserEntity> getUserConnections (long userId) {
+        return userRepository.findOne(userId).getUserConnections();
     }
     
 }
